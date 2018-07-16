@@ -60,16 +60,6 @@ ARG PHP_BUILD_DEPS="zip mbstring curl xml"
 # documented.
 RUN docker-php-ext-install ${PHP_BUILD_DEPS}
 
-# Replace default Apache config with SSL-enabled config.
-RUN rm /etc/apache2/sites-available/000-default.conf
-COPY ./000-default.conf /etc/apache2/sites-available
-
-# Generate the self-signed cert referenced in the conf and finally check if everything is good.
-RUN mkdir /etc/apache2/ssl
-RUN openssl req -x509 -nodes -days 1095 -newkey rsa:2048 -subj "/C=US/ST=New York/L=New York/O=None/CN=127.0.0.1" -out /etc/apache2/ssl/server.crt -keyout /etc/apache2/ssl/server.key
-RUN a2enmod ssl
-RUN apachectl configtest
-
 # Change to a restricted user.
 USER www-data
 
@@ -85,6 +75,22 @@ RUN yarn install
 
 # The runtime image.
 FROM php:7.2.0-apache-stretch
+
+# Change back to root for the next few instructions.
+USER root
+
+# Replace default Apache config with SSL-enabled config.
+RUN rm /etc/apache2/sites-available/000-default.conf
+COPY ./000-default.conf /etc/apache2/sites-available
+
+# Generate the self-signed cert referenced in the conf and finally check if everything is good.
+RUN mkdir /etc/apache2/ssl
+RUN openssl req -x509 -nodes -days 1095 -newkey rsa:2048 -subj "/C=US/ST=New York/L=New York/O=None/CN=127.0.0.1" -out /etc/apache2/ssl/server.crt -keyout /etc/apache2/ssl/server.key
+RUN a2enmod ssl
+RUN apachectl configtest
+
+# Change back to www-data for everything else.
+USER www-data
 
 # These are dependencies needed both at build time and at runtime. This is
 # repeated because docker doesn't seem to have a way to share args across build
