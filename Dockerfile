@@ -60,6 +60,9 @@ ARG PHP_BUILD_DEPS="zip mbstring curl xml"
 # documented.
 RUN docker-php-ext-install ${PHP_BUILD_DEPS}
 
+# Change to a restricted user.
+USER www-data
+
 # Clone the koel repository.
 RUN git clone ${KOEL_CLONE_SOURCE} -b ${KOEL_VERSION_REF} /tmp/koel
 
