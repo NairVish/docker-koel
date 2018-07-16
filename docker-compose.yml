@@ -2,17 +2,49 @@ version: '3.4'
 
 services:
   koel:
-    image: 0xcaff/koel
+    image: nairvish/docker-koel
     depends_on:
       - database
     ports:
-      - 80:80
+      - 8080:80
     environment:
       DB_CONNECTION: mysql
       DB_HOST: database
       DB_USERNAME: koel
       DB_PASSWORD: koel
       DB_DATABASE: koel
+      IGNORE_DOT_FILES: 'true'
+      APP_ENV: production
+      APP_DEBUG: 'true'
+      APP_URL: https://koel.domain.tld
+      APP_MAX_SCAN_TIME: 600
+      MEMORY_LIMIT: 2048
+      STREAMING_METHOD: php
+      FFMPEG_PATH: /usr/local/bin/ffmpeg
+      OUTPUT_BIT_RATE: 256
+      ALLOW_DOWNLOAD: 'true'
+      CACHE_MEDIA: 'true'
+      APP_LOG_LEVEL: debug
+      BROADCAST_DRIVER: log
+      CACHE_DRIVER: file
+      SESSION_DRIVER: file
+      QUEUE_DRIVER: sync
+      MAIL_DRIVER: smtp
+      MAIL_HOST: smtp.mailserver.tld
+      MAIL_PORT: 465
+      MAIL_USERNAME: koel@mailserver.tld
+      MAIL_PASSWORD: password
+      MAIL_ENCRYPTION: tls
+      ## LAST.FM config ##
+      # LASTFM_API_KEY=
+      # LASTFM_API_SECRET=
+      ## YOUTUBE config ##
+      # YOUTUBE_API_KEY=
+      ## PUSHER config ##
+      # PUSHER_APP_ID=
+      # PUSHER_APP_KEY=
+      # PUSHER_APP_SECRET=
+      # PUSHER_APP_CLUSTER=
     volumes:
       - music:/music
       - covers:/var/www/html/public/img/covers
