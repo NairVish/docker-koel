@@ -12,8 +12,8 @@ ARG NODE_VERSION=node_8.x
 
 # Install dependencies to install dependencies.
 RUN apt-get update && apt-get install --yes \
-  gnupg2=2.1.18-8~deb9u1 \
-  apt-transport-https=1.4.8
+  gnupg2 \
+  apt-transport-https
 
 # Add node repository.
 RUN curl --silent https://deb.nodesource.com/gpgkey/nodesource.gpg.key \
