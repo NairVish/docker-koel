@@ -3,6 +3,8 @@ version: '3.4'
 services:
   koel:
     image: nairvish/docker-koel
+    container_name: "koel_base"
+    restart: always
     depends_on:
       - database
     ports:
@@ -51,6 +53,8 @@ services:
 
   database:
     image: mysql/mysql-server:5.7
+    container_name: "koel_mysql"
+    restart: always
     volumes:
       - db:/var/lib/mysql
     environment:
